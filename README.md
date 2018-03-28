@@ -1,5 +1,5 @@
 # hpc-script-foo
 
 ## Debugging - see `debug/`
-
-* gdb-wrapper.bash - execute something under gdb and capture thread stacks upon hitting a fault
+* `gdb/wrapper` - execute a program under gdb and capture all thread stacks upon hitting a fault
+* `ssh/checker` - check passwordless ssh between hosts

@@ -11,4 +11,4 @@ USAGE:
 * `/path/to/check-ssh.bash <hostfile>`
 
 FILES:
-1. <hostfile> - should contain hostnames separated by spaces/newlines
+1. `<hostfile>` - should contain hostnames separated by spaces/newlines

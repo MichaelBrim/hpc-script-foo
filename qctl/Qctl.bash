@@ -90,9 +90,9 @@ if [[ $action == "config" ]]; then
 
 elif [[ $action == "cancel" ]]; then
     if [[ -n $QCTL_JOBID ]]; then
-        echo $(qctl_cancel_job "$QCTL_JOBID")
+        eval $(qctl_cancel_job "$QCTL_JOBID")
     elif [[ -n $QCTL_QUEUE ]]; then
-        echo $(qctl_cancel_queue "$QCTL_QUEUE" "$QCTL_USER")
+        eval $(qctl_cancel_queue "$QCTL_QUEUE" "$QCTL_USER")
     else
         echo "USAGE ERROR: missing cancel option"
         print_usage
@@ -101,9 +101,9 @@ elif [[ $action == "cancel" ]]; then
 
 elif [[ $action == "detail" ]]; then
     if [[ -n $QCTL_JOBID ]]; then
-        echo $(qctl_detail_job "$QCTL_JOBID")
+        eval $(qctl_detail_job "$QCTL_JOBID")
     elif [[ -n $QCTL_QUEUE ]]; then
-        echo $(qctl_detail_queue "$QCTL_QUEUE")
+        eval $(qctl_detail_queue "$QCTL_QUEUE")
     else
         echo "USAGE ERROR: missing detail option"
         print_usage
@@ -112,9 +112,9 @@ elif [[ $action == "detail" ]]; then
 
 elif [[ $action == "hold" ]]; then
     if [[ -n $QCTL_JOBID ]]; then
-        echo $(qctl_hold_job "$QCTL_JOBID")
+        eval $(qctl_hold_job "$QCTL_JOBID")
     elif [[ -n $QCTL_QUEUE ]]; then
-        echo $(qctl_hold_queue "$QCTL_QUEUE" "$QCTL_USER")
+        eval $(qctl_hold_queue "$QCTL_QUEUE" "$QCTL_USER")
     else
         echo "USAGE ERROR: missing hold option"
         print_usage
@@ -122,13 +122,13 @@ elif [[ $action == "hold" ]]; then
     fi
 
 elif [[ $action == "hosts" ]]; then
-    echo $(qctl_status_hosts)
+    eval $(qctl_status_hosts)
 
 elif [[ $action == "resume" ]]; then
     if [[ -n $QCTL_JOBID ]]; then
-        echo $(qctl_resume_job "$QCTL_JOBID")
+        eval $(qctl_resume_job "$QCTL_JOBID")
     elif [[ -n $QCTL_QUEUE ]]; then
-        echo $(qctl_resume_queue "$QCTL_QUEUE" "$QCTL_USER")
+        eval $(qctl_resume_queue "$QCTL_QUEUE" "$QCTL_USER")
     else
         echo "USAGE ERROR: missing resume option"
         print_usage
@@ -137,13 +137,13 @@ elif [[ $action == "resume" ]]; then
 
 elif [[ $action == "status" ]]; then
     if [[ -n $QCTL_JOBID ]]; then
-        echo $(qctl_status_job "$QCTL_JOBID")
+        eval $(qctl_status_job "$QCTL_JOBID")
     elif [[ -n $QCTL_PROJID ]]; then
-        echo $(qctl_status_project "$QCTL_PROJID" "$QCTL_QUEUE")
+        eval $(qctl_status_project "$QCTL_PROJID" "$QCTL_QUEUE")
     elif [[ -n $QCTL_USER ]]; then
-        echo $(qctl_status_user "$QCTL_USER" "$QCTL_QUEUE")
+        eval $(qctl_status_user "$QCTL_USER" "$QCTL_QUEUE")
     elif [[ -n $QCTL_QUEUE ]]; then
-        echo $(qctl_status_queue "$QCTL_QUEUE")
+        eval $(qctl_status_queue "$QCTL_QUEUE")
     else
         echo "USAGE ERROR: missing status option"
         print_usage
@@ -152,9 +152,9 @@ elif [[ $action == "status" ]]; then
 
 elif [[ $action == "submit" ]]; then
     if [[ -n $QCTL_JOB_SCRIPT ]]; then
-        echo $(qctl_submit_batch "$QCTL_QUEUE" "$QCTL_PROJID" "$QCTL_WALLTIME" "$QCTL_NUM_NODES" "$QCTL_JOB_SCRIPT")
+        eval $(qctl_submit_batch "$QCTL_QUEUE" "$QCTL_PROJID" "$QCTL_WALLTIME" "$QCTL_NUM_NODES" "$QCTL_JOB_SCRIPT")
     else
-        echo $(qctl_submit_interactive "$QCTL_QUEUE" "$QCTL_PROJID" "$QCTL_WALLTIME" "$QCTL_NUM_NODES")
+        eval $(qctl_submit_interactive "$QCTL_QUEUE" "$QCTL_PROJID" "$QCTL_WALLTIME" "$QCTL_NUM_NODES")
     fi
 
 else

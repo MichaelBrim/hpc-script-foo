@@ -7,6 +7,8 @@ Description:
 
 Usage:
 ```
+export QCTL_BATCH_SYSTEM="lsf" # or "pbs", "slurm"
+
 qctl <action> [<action-options>]
 
   Actions     Options

@@ -4,7 +4,7 @@ qctl_cancel_job () {
     echo "$cmd $job"
 }
 
-qctl_cacnel_queue () {
+qctl_cancel_queue () {
     local que=$1
     local usr=$2
     local cmd="bkill"

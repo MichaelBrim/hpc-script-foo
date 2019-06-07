@@ -89,24 +89,24 @@ if [[ $action == "config" ]]; then
     env | fgrep QCTL_
 
 elif [[ $action == "cancel" ]]; then
-    echo $(qctl_cancel_job "$QCTL_QUEUE" "$QCTL_JOBID")
-    echo $(qctl_cancel_queue "$QCTL_QUEUE")
+    echo $(qctl_cancel_job $QCTL_JOBID")
+    echo $(qctl_cancel_queue "$QCTL_QUEUE" "$QCTL_USER")
 
 elif [[ $action == "hold" ]]; then
-    echo $(qctl_hold_job "$QCTL_QUEUE" "$QCTL_JOBID")
-    echo $(qctl_hold_queue "$QCTL_QUEUE")
+    echo $(qctl_hold_job "$QCTL_JOBID")
+    echo $(qctl_hold_queue "$QCTL_QUEUE" "$QCTL_USER")
 
 elif [[ $action == "resume" ]]; then
-    echo $(qctl_resume_job "$QCTL_QUEUE" "$QCTL_JOBID")
-    echo $(qctl_resume_queue "$QCTL_QUEUE")
+    echo $(qctl_resume_job "$QCTL_JOBID")
+    echo $(qctl_resume_queue "$QCTL_QUEUE" "$QCTL_USER")
 
 elif [[ $action == "status" ]]; then
-    echo $(qctl_detail_job "$QCTL_QUEUE" "$QCTL_JOBID")
+    echo $(qctl_detail_job "$QCTL_JOBID")
     echo $(qctl_detail_queue "$QCTL_QUEUE")
     echo $(qctl_status_hosts)
-    echo $(qctl_status_job "$QCTL_QUEUE" "$QCTL_JOBID")
+    echo $(qctl_status_job $QCTL_JOBID")
     echo $(qctl_status_queue "$QCTL_QUEUE")
-    echo $(qctl_status_user "$QCTL_QUEUE" "$QCTL_USER")
+    echo $(qctl_status_user "$QCTL_USER" "$QCTL_QUEUE")
 
 elif [[ $action == "submit" ]]; then
     echo $(qctl_submit_batch "$QCTL_QUEUE" "$QCTL_PROJECT" "$QCTL_WALLTIME" "$QCTL_NUM_NODES" "$QCTL_JOB_SCRIPT")

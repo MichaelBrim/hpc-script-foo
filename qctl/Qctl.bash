@@ -6,11 +6,13 @@ print_usage () {
   echo "  Actions     Options"
   echo "--------------------------------------------"
   echo "  config      N/A"
-  echo "  cancel      -j <jobid>, -p <project>, -q <queue>, -u <uid>"
-  echo "  hold        -j <jobid>, -p <project>, -q <queue>, -u <uid>"
-  echo "  resume      -j <jobid>, -p <project>, -q <queue>, -u <uid>"
-  echo "  status      -j <jobid>, -p <project>, -q <queue>, -u <uid>"
-  echo "  submit      -n <node-count>, -p <project>, -q <queue>, -s <script>, -w <walltime-minutes>"
+  echo "  cancel      -j <jobid> | -q <queue>"
+  echo "  detail      -j <jobid> | -q <queue>"
+  echo "  hold        -j <jobid> | -q <queue>"
+  echo "  hosts       N/A"
+  echo "  resume      -j <jobid> | -q <queue>"
+  echo "  status      -j <jobid> | -p <project> | -q <queue> | -u <uid>"
+  echo "  submit      [-n <node-count>] [-p <project>] [-q <queue>] [-s <script>] [-w <walltime-minutes>]"
 }
 
 
@@ -24,7 +26,7 @@ fi
 export QCTL_BATCH_SYSTEM=${QCTL_BATCH_SYSTEM:-none}
 export QCTL_COMPUTE_SYSTEM=${QCTL_COMPUTE_SYSTEM:-$NCCS_SYSTEM}
 export QCTL_PROJECT=${QCTL_PROJECT:-$NCCS_PROJECT}
-export QCTL_USER=${QCTL_USER:-$NCCS_USER}
+export QCTL_USER=${QCTL_USER}
 
 # load default batch system implementations
 cfgfile=batch-systems/default-config.bash
@@ -52,7 +54,7 @@ while [[ $# -gt 0 ]]; do
     opt=$1
     opt_arg=$2
     shift 2 || { echo "USAGE ERROR: missing option $opt argument"; print_usage; exit 1; }
-    [[ $opt_arg =~ -[[:alpha:]] ]] &&  { echo "USAGE ERROR: missing option $opt argument"; print_usage; exit 1; }
+    [[ $opt_arg =~ ^-[[:alpha:]]*$ ]] &&  { echo "USAGE ERROR: missing option $opt argument"; print_usage; exit 1; }
     case $opt in
       "-j")
           export QCTL_JOBID=$opt_arg 
@@ -89,28 +91,53 @@ if [[ $action == "config" ]]; then
     env | fgrep QCTL_
 
 elif [[ $action == "cancel" ]]; then
-    echo $(qctl_cancel_job $QCTL_JOBID")
-    echo $(qctl_cancel_queue "$QCTL_QUEUE" "$QCTL_USER")
+    if [[ -n $QCTL_JOBID ]]; then
+        echo $(qctl_cancel_job "$QCTL_JOBID")
+    elif [[ -n $QCTL_QUEUE ]]; then
+        echo $(qctl_cancel_queue "$QCTL_QUEUE" "$QCTL_USER")
+    fi
+
+elif [[ $action == "detail" ]]; then
+    if [[ -n $QCTL_JOBID ]]; then
+        echo $(qctl_detail_job "$QCTL_JOBID")
+    elif [[ -n $QCTL_QUEUE ]]; then
+        echo $(qctl_detail_queue "$QCTL_QUEUE")
+    fi
 
 elif [[ $action == "hold" ]]; then
-    echo $(qctl_hold_job "$QCTL_JOBID")
-    echo $(qctl_hold_queue "$QCTL_QUEUE" "$QCTL_USER")
+    if [[ -n $QCTL_JOBID ]]; then
+        echo $(qctl_hold_job "$QCTL_JOBID")
+    elif [[ -n $QCTL_QUEUE ]]; then
+        echo $(qctl_hold_queue "$QCTL_QUEUE" "$QCTL_USER")
+    fi
+
+elif [[ $action == "hosts" ]]; then
+    echo $(qctl_status_hosts)
 
 elif [[ $action == "resume" ]]; then
-    echo $(qctl_resume_job "$QCTL_JOBID")
-    echo $(qctl_resume_queue "$QCTL_QUEUE" "$QCTL_USER")
+    if [[ -n $QCTL_JOBID ]]; then
+        echo $(qctl_resume_job "$QCTL_JOBID")
+    elif [[ -n $QCTL_QUEUE ]]; then
+        echo $(qctl_resume_queue "$QCTL_QUEUE" "$QCTL_USER")
+    fi
 
 elif [[ $action == "status" ]]; then
-    echo $(qctl_detail_job "$QCTL_JOBID")
-    echo $(qctl_detail_queue "$QCTL_QUEUE")
-    echo $(qctl_status_hosts)
-    echo $(qctl_status_job $QCTL_JOBID")
-    echo $(qctl_status_queue "$QCTL_QUEUE")
-    echo $(qctl_status_user "$QCTL_USER" "$QCTL_QUEUE")
+    if [[ -n $QCTL_JOBID ]]; then
+        echo $(qctl_status_job "$QCTL_JOBID")
+    elif [[ -n $QCTL_PROJECT ]]; then
+        echo $(qctl_status_project "$QCTL_PROJECT" "$QCTL_QUEUE")
+    elif [[ -n $QCTL_USER ]]; then
+        echo $(qctl_status_user "$QCTL_USER" "$QCTL_QUEUE")
+    elif [[ -n $QCTL_QUEUE ]]; then
+        echo $(qctl_status_queue "$QCTL_QUEUE")
+    fi
 
 elif [[ $action == "submit" ]]; then
-    echo $(qctl_submit_batch "$QCTL_QUEUE" "$QCTL_PROJECT" "$QCTL_WALLTIME" "$QCTL_NUM_NODES" "$QCTL_JOB_SCRIPT")
-    echo $(qctl_submit_interactive "$QCTL_QUEUE" "$QCTL_PROJECT" "$QCTL_WALLTIME" "$QCTL_NUM_NODES")
+    if [[ -n $QCTL_JOB_SCRIPT ]]; then
+        echo $(qctl_submit_batch "$QCTL_QUEUE" "$QCTL_PROJECT" "$QCTL_WALLTIME" "$QCTL_NUM_NODES" "$QCTL_JOB_SCRIPT")
+    else
+        echo $(qctl_submit_interactive "$QCTL_QUEUE" "$QCTL_PROJECT" "$QCTL_WALLTIME" "$QCTL_NUM_NODES")
+    fi
 
 else
     echo "USAGE ERROR: unknown action $action"

@@ -42,6 +42,10 @@ qctl_status_job () {
     default_not_supported ${FUNCNAME[0]}
 }
 
+qctl_status_project () {
+    default_not_supported ${FUNCNAME[0]}
+}
+
 qctl_status_queue () {
     default_not_supported ${FUNCNAME[0]}
 }

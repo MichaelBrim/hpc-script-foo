@@ -60,6 +60,14 @@ qctl_status_job () {
     echo "$cmd $job"
 }
 
+qctl_status_project () {
+    local prj=$1
+    local que=$2
+    local cmd="bjobs -a"
+    [[ -n $que ]] && cmd="$cmd -q $que"
+    echo "$cmd -P $prj"
+}
+
 qctl_status_queue () {
     local que=$1
     local cmd="bqueues"

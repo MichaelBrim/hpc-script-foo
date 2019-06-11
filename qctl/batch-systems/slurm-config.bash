@@ -18,8 +18,8 @@ qctl_cancel_job () {
 
 qctl_detail_job () {
     local job=$1
-    local cmd="squeue -l"
-    echo "$cmd -j $job"
+    local cmd="scontrol show"
+    echo "$cmd job=$job"
 }
 
 qctl_detail_queue () {
@@ -49,7 +49,7 @@ qctl_status_hosts () {
 
 qctl_status_job () {
     local job=$1
-    local cmd="squeue"
+    local cmd="squeue -l"
     echo "$cmd -j $job"
 }
 

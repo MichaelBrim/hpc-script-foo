@@ -1,1 +1,0 @@
-export QCTL_BATCH_SYSTEM=moab
